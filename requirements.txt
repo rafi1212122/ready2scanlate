@@ -1,0 +1,17 @@
+jaconv
+numexpr
+numpy
+onnx
+onnxsim
+opencv_python
+pandas
+Pillow
+pyclipper
+PyYAML
+scipy
+setuptools
+shapely
+torch
+torchsummary
+torchvision
+transformers
