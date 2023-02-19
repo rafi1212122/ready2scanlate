@@ -15,3 +15,5 @@ torch
 torchsummary
 torchvision
 transformers
+websockets
+protobuf

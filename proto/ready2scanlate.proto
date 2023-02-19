@@ -1,0 +1,17 @@
+syntax = "proto3";
+package rafi12.ready2scanlate;
+
+message SyncTimeReq {
+    int32 client_time = 1;
+}
+
+message SyncTimeRsp {
+    int32 server_time = 1;
+}
+
+message SocketMessage {
+    oneof message {
+        SyncTimeReq sync_time_req = 1;
+        SyncTimeRsp sync_time_rsp = 2;
+    }
+}
