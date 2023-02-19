@@ -6,7 +6,7 @@ detector_model = 'models/comictextdetector.pt'
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--input", type=str, help="input file")
-parser.add_argument("-o", "--output", default='./results/',
+parser.add_argument("-o", "--output", default='results',
                     type=str, help="output directory")
 parser.add_argument("--ocr-model", default=ocr_model,
                     type=str, help="change directory of ocr model")
@@ -16,4 +16,4 @@ parser.add_argument("--detector-model", default=detector_model,
 args = parser.parse_args()
 
 json_ocr = JsonOcr(ocr_model, detector_model)
-write_json(args.input, json_ocr, args.output)
+write_json(args.input, args.output, json_ocr)

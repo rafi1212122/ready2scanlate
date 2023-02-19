@@ -5,8 +5,9 @@ from scipy.signal.windows import gaussian
 from comic_text_detector.inference import TextDetector
 from manga_ocr import MangaOcr
 import json
-import os
+from pathlib import Path
 from torch import cuda
+
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -27,14 +28,15 @@ def dump_json(obj, path):
         json.dump(obj, f, ensure_ascii=False, cls=NumpyEncoder)
 
 
-def imread(path, flags=cv2.IMREAD_COLOR):
+def imread(path):
     """cv2.imread, but works with unicode paths"""
-    return cv2.imdecode(np.fromfile(path, dtype=np.uint8), flags)
+    return cv2.imdecode(np.fromfile(path, dtype=np.uint8), cv2.IMREAD_COLOR)
+
 
 class JsonOcr:
     def __init__(self,
-                 ocr_model='./models/manga-ocr-base',
-                 text_seg_model='./models/comictextdetector.pt',
+                 ocr_model='models/manga-ocr-base',
+                 text_seg_model='models/comictextdetector.pt',
                  force_cpu=False,
                  seg_input_size=1024,
                  text_height=64,
@@ -134,9 +136,10 @@ class JsonOcr:
             return np.split(line_crop, cut_points, axis=1), cut_points
 
 
-def write_json(img_path, json_ocr: JsonOcr, output_dir):
-    result = json_ocr(img_path)
-    results_dir = os.path.abspath(output_dir)
-    json_file = os.path.splitext(os.path.basename(img_path))[0] + '.json'
-    json_path = results_dir + '/' + json_file
+def write_json(image_path, output_dir, json_ocr: JsonOcr):
+    image_path = Path(image_path).expanduser().absolute()
+    output_dir = Path(output_dir).expanduser().absolute()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    json_path = (output_dir / image_path.name).with_suffix('.json')
+    result = json_ocr(image_path)
     dump_json(result, json_path)
