@@ -30,7 +30,11 @@ def dump_json(obj, path):
 
 def imread(path):
     """cv2.imread, but works with unicode paths"""
-    return cv2.imdecode(np.fromfile(path, dtype=np.uint8), cv2.IMREAD_COLOR)
+    if type(path) is not bytes:
+        return cv2.imdecode(np.fromfile(path, dtype=np.uint8), cv2.IMREAD_COLOR)
+    else:
+        return cv2.imdecode(np.frombuffer(path, dtype=np.ubyte), cv2.IMREAD_COLOR)
+
 
 
 class JsonOcr:
