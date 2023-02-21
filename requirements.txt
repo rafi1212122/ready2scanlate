@@ -17,3 +17,5 @@ torchvision
 transformers
 websockets
 protobuf
+uvicorn
+fastapi

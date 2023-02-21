@@ -1,24 +1,36 @@
 import websockets
 import asyncio
 import importlib
+import socketserver
 from utils.logger import Logger
 from proto.lib.rafi12.ready2scanlate import SocketMessage
 from betterproto import Casing
 from utils.json_writer import JsonOcr
+from http import server
+from threading import Thread
 
 JSON_OCR = JsonOcr('models/manga-ocr-base', 'models/comictextdetector.pt')
 WS_LOG = Logger("WS")
+HTTP_LOG = Logger("HTTP")
 SESSIONS = {}
 JOBS_RESULT = {}
 
+def start_demo():
+    class HTTPHandler(server.SimpleHTTPRequestHandler):
+        def do_GET(self):
+            self.path = "/dist"+self.path
+            return server.SimpleHTTPRequestHandler.do_GET(self)
+    http_server = socketserver.TCPServer(("0.0.0.0", 5000), HTTPHandler)
+    HTTP_LOG.log("HTTP ws demo server started in port 5000!")
+    http_server.serve_forever()
+
 async def main(port):
     async with websockets.serve(on_message, "0.0.0.0", port):
-        WS_LOG.log(f"Websocket server started in port {port}")
+        demo_thread = Thread(target=start_demo)
+        demo_thread.start()
+        WS_LOG.log(f"Websocket server started in port {port}!")
         await asyncio.Future()
-
-def start(port=5005):
-    asyncio.run(main(port))
-
+        
 async def on_message(socket):
     WS_LOG.log(f"{socket.remote_address[0]}:{socket.remote_address[1]} connected!")
     SESSIONS.update({ f"{socket.remote_address[0]}:{socket.remote_address[1]}": socket })

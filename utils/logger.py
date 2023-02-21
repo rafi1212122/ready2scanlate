@@ -1,7 +1,7 @@
 import time
 
 class Logger:
-    def __init__(self, name) -> None:
+    def __init__(self, name: str) -> None:
         self.name = name
     
     def log(self, content):
