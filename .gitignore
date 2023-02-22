@@ -1,5 +1,6 @@
 **/__pycache__
-models/**
+data/models/**
+data/testpacks
 results/**
 /rafi12
 .ipynb_checkpoints
