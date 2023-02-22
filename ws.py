@@ -5,11 +5,11 @@ import socketserver
 from utils.logger import Logger
 from proto.lib.rafi12.ready2scanlate import SocketMessage
 from betterproto import Casing
-from utils.json_writer import JsonOcr
 from http import server
 from threading import Thread
+from core import R2S
 
-JSON_OCR = JsonOcr('models/manga-ocr-base', 'models/comictextdetector.pt')
+JSON_OCR = R2S()
 WS_LOG = Logger("WS")
 HTTP_LOG = Logger("HTTP")
 SESSIONS = {}
