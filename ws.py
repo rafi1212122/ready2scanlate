@@ -25,7 +25,7 @@ def start_demo():
     http_server.serve_forever()
 
 async def main(port):
-    async with websockets.serve(on_message, "0.0.0.0", port):
+    async with websockets.serve(on_message, "0.0.0.0", port, max_size=100_000_000):
         demo_thread = Thread(target=start_demo)
         demo_thread.start()
         WS_LOG.log(f"Websocket server started in port {port}!")
